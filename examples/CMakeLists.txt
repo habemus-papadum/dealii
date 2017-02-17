@@ -67,21 +67,5 @@ foreach(step_path ${steps})
   get_filename_component(step ${step_path} NAME)
   add_executable(${step} ${step_path}/${step}.cc)
   set_target_properties(${step} PROPERTIES EXCLUDE_FROM_ALL TRUE)
-
-  set(_build ${DEAL_II_BUILD_TYPES})
-  SET_PROPERTY(TARGET ${step} APPEND PROPERTY
-          INCLUDE_DIRECTORIES
-          "${CMAKE_BINARY_DIR}/include"
-          "${CMAKE_SOURCE_DIR}/include"
-          "${CMAKE_SOURCE_DIR}/include/deal.II/")
-  SET_TARGET_PROPERTIES(${step} PROPERTIES
-          #LINK_FLAGS " ${DEAL_II_LINKER_FLAGS_${_build}}"
-          COMPILE_DEFINITIONS "${DEAL_II_DEFINITIONS};${DEAL_II_DEFINITIONS_${_build}}"
-          COMPILE_FLAGS "${DEAL_II_CXX_FLAGS} ${DEAL_II_CXX_FLAGS_${_build}}"
-          LINKER_LANGUAGE "CXX"
-          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${_test_short}"
-          )
-  TARGET_LINK_LIBRARIES(${step}
-            ${DEAL_II_BASE_NAME}${DEAL_II_${_build}_SUFFIX})
-
+  DEAL_II_INSOURCE_SETUP_TARGET(${step} ${DEAL_II_BUILD_TYPES})
 endforeach()
